@@ -2,7 +2,7 @@ import pulp
 import random
 
 # 1. Генерация данных
-# Дисциплины и их курсы (из предоставленных скриншотов)
+# Дисциплины и их курсы
 disciplines = {
     'Современные языки программирования': [
         'JavaScript. Разработка пользовательских веб-интерфейсов (HTML-академия)',
@@ -34,7 +34,7 @@ disciplines = {
     'Системная аналитика': [
         'Бизнес-аналитика',
         'Системная аналитика (Альфа-Банк)',
-        'Системная аналитика (ИТИ)',
+        'Системная аналитика (ИИТ)',
         'Системная аналитика (МТС)'
     ],
 
@@ -126,11 +126,10 @@ time_to_day = {}
 for day in days:
     time_to_day[day] = [slot for slot in time_slots if slot.startswith(day)]
 
-# Каждой группе зададим случайный набор временных слотов (для упрощения - 2-3 доступных слота)
+# Каждой группе зададим временной слот
 time_groups = {}
 for g in professors_groups.keys():
-    available_for_group = random.sample(time_slots, random.randint(2, 3))
-    time_groups[g] = available_for_group
+    time_groups[g] = random.sample(time_slots, 1)
 
 # Добавляем фиксированные курсы
 fixed_courses = {
@@ -289,7 +288,7 @@ if pulp.LpStatus[prob.status] == 'Optimal':
 
     schedule.sort(key=lambda x: (day_order[x[0]], time_order[x[1]]))
 
-    print('Составленное расписание:')
+    print(f'Составленное расписание c ограничением на {M} пары в день:')
     current_day = None
     pairs_count = 0
     for entry in schedule:
